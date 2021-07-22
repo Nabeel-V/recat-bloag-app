@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import { useHistory } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -17,6 +17,9 @@ import {
 import Phone from "material-ui-phone-number";
 import Alert from "@material-ui/lab/Alert";
 import { useAuth } from "../Context/AuthContext";
+
+
+
 
 const Signup = () => {
   const history = useHistory();
@@ -48,13 +51,14 @@ const Signup = () => {
   const initialValues = {
     name: "",
     email: "",
-    phoneNumber: "".toString(),
+    phoneNumber: "",
     password: "",
     confirmPassword: "",
     termsAndConditions: false,
   };
 
   async function handleFormSubmit(values, props) {
+    console.log(values)
     try {
       setError("");
       await signup(values.email, values.password);
@@ -96,7 +100,7 @@ const Signup = () => {
               Please fill the section to create an account
             </Typography>
           </Grid>
-          {error && <Alert>{error}</Alert>}
+          {error && <Alert severity="error">{error}</Alert>}
           <Formik
             initialValues={initialValues}
             onSubmit={handleFormSubmit}
