@@ -14,7 +14,6 @@ import {
   FormControlLabel,
   FormHelperText,
 } from "@material-ui/core";
-import Phone from "material-ui-phone-number";
 import Alert from "@material-ui/lab/Alert";
 import { useAuth } from "../Context/AuthContext";
 
@@ -132,15 +131,6 @@ const Signup = () => {
                       {(msg) => <div style={{ color: "red" }}>{msg}</div>}
                     </ErrorMessage>
                   }
-                />
-
-                <Field
-                  as={Phone}
-                  name="phoneNumber"
-                  defaultCountry={"in"}
-                  style={{ marginTop: "10px" }}
-                  fullWidth
-                  autoComplete="off"
                 />
                 <Field
                   as={TextField}

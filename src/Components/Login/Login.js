@@ -52,7 +52,7 @@ const Login = () => {
     try {
       setError("")
       await login(values.email, values.password)
-      history.push('/')
+      history.push('/edit')
     } catch {
       setError("Something Wrong")
     }

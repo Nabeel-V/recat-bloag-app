@@ -1,35 +1,12 @@
-import React from 'react'
-import {Grid, Paper} from '@material-ui/core'
-import NavBar from '../NavBar/NavBar'
+import React from "react";
+import './HomePage.css'
 
 const HomePage = () => {
-    return (
-      <div>
-          <NavBar/>
-        <Grid
-          container
-          spacing={0}
-          direction="column"
-          alignItems="center"
-          justify="center"
-          style={{ minHeight: "100vh" }}
-        >
-          <Paper>
-              Welcome
-              Welcome
-              Welcome
-              Welcome
-              Welcome
-              Welcome
-              Welcome
-              Welcome
-              Welcome
-              Welcome
-              Welcome
-          </Paper>
-        </Grid>
-      </div>
-    );
-}
+  return (
+    <div>
+     <img className="headerImg" src="https://images.pexels.com/photos/1167355/pexels-photo-1167355.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=650&amp;w=940" alt=""></img>
+    </div>
+  );
+};
 
-export default HomePage
+export default HomePage;

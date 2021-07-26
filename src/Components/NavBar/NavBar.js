@@ -1,6 +1,14 @@
 import React from "react";
-import { alpha, makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
+import clsx from "clsx";
+import { alpha, makeStyles, useTheme } from "@material-ui/core/styles";
+import {
+  AppBar,
+  Drawer,
+  List,
+  ListItem,
+  Divider,
+  ListItemText,
+} from "@material-ui/core";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
@@ -12,12 +20,71 @@ import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
+import CreateIcon from "@material-ui/icons/Create";
 import NotificationsIcon from "@material-ui/icons/Notifications";
+import HomeIcon from "@material-ui/icons/Home";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import BookmarkOutlinedIcon from "@material-ui/icons/BookmarkOutlined";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    
+  },
+  appBar: {
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  appBarShift: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  hide: {
+    display: "none",
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  drawerHeader: {
+    display: "flex",
+    alignItems: "center",
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: "flex-end",
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -drawerWidth,
+  },
+  contentShift: {
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  },
   grow: {
     flexGrow: 1,
   },
@@ -94,15 +161,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const drawerWidth = 200;
+
 export default function PrimarySearchAppBar() {
   const { currentUser, logout } = useAuth();
   const history = useHistory();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -114,8 +192,13 @@ export default function PrimarySearchAppBar() {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    handleMobileMenuClose();
   };
+  const handleprofileEdit =()=>{
+    history.push('/edit')
+          setAnchorEl(null);
+
+
+  }
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
@@ -123,7 +206,10 @@ export default function PrimarySearchAppBar() {
 
   async function handleLogOut() {
     await logout();
-    history.push("/login");
+    history.push("/");
+      setAnchorEl(null);
+
+
   }
 
   const menuId = "primary-search-account-menu";
@@ -138,7 +224,7 @@ export default function PrimarySearchAppBar() {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleprofileEdit}>My account</MenuItem>
       <MenuItem onClick={handleLogOut}>Logout</MenuItem>
     </Menu>
   );
@@ -187,17 +273,20 @@ export default function PrimarySearchAppBar() {
   return (
     <div className={classes.grow}>
       <AppBar
-        position="static"
+        position="fixed"
         style={{
-          background: "linear-gradient(180deg,#000000d4, #15a093)",
+          background: "linear-gradient(180deg,rgb(0 0 0 / 93%), #15a093)",
         }}
       >
         <Toolbar>
           <IconButton
-            edge="start"
-            className={classes.menuButton}
             color="black"
             aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            className={clsx(classes.menuButton, {
+              [classes.hide]: open,
+            })}
           >
             <MenuIcon />
           </IconButton>
@@ -286,6 +375,54 @@ export default function PrimarySearchAppBar() {
           </div>
         </Toolbar>
       </AppBar>
+      <Drawer
+        className={classes.drawer}
+        variant="persistent"
+        anchor="left"
+        open={open}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "ltr" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          <ListItem button onClick={() => history.push("/")}>
+            <ListItemIcon>
+              <HomeIcon  />
+            </ListItemIcon>
+            <ListItemText primary="Home" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon >
+              <CreateIcon />
+            </ListItemIcon>
+            <ListItemText primary="Write" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon>
+              <BookmarkOutlinedIcon  />
+            </ListItemIcon>
+            <ListItemText primary="Saved" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon>
+              <InfoOutlinedIcon  />
+            </ListItemIcon>
+            <ListItemText primary="About us" />
+          </ListItem>
+        </List>
+        <Divider />
+      </Drawer>
+
       {renderMobileMenu}
       {renderMenu}
     </div>
